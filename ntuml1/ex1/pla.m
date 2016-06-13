@@ -1,4 +1,4 @@
-function [w, update_times] = pla(data, eta=1)
+function [w update_times] = pla(data, eta=1)
 
 m = size(data, 1);
 n = size(data, 2);
