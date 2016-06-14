@@ -5,7 +5,12 @@ function [err_in err_out] = q17(N=20, noise=0.2, T=5000)
     x = sort(unifrnd(-1, 1, N, 1));
     y = xor(x > 0, unifrnd(0, 1, N, 1) <= noise);
 
-    [s theta err_in] = train_decision_stump(x, y);
+    best = train_decision_stump(x, y);
+    err_in = best.err;
+    besti = unidrnd(length(best));
+    s = best.s(besti);
+    theta = best.theta(besti);
+
     err_out = get_err_out(x, y, s, theta);
 
     total_err_in += err_in;

@@ -1,12 +1,13 @@
-function [s theta err] = train_decision_stump(x, y)
+function best = train_decision_stump(x, y)
   % x is input
   % y is output
 
+  [x xi] = sort(x);
+  y = y(xi);
+
   N = length(x);
 
-  best_s = 0;
-  best_theta = 0;
-  best_err = 0;
+  best.err = -1;
 
   for i = 0:length(x)
     if (i == 0)
@@ -20,14 +21,14 @@ function [s theta err] = train_decision_stump(x, y)
 
     for s = [-1 1]
       err = get_err(x, y, s, theta);
-      if (best_s == 0 || best_err > err)
-        best_theta = theta;
-        best_s = s;
-        best_err = err;
+      if (best.err < 0 || best.err > err)
+        best.err = err;
+        best.s = [s];
+        best.theta = [theta];
+      elseif (best.err == err)
+        best.s(end+1) = s;
+        best.theta(end+1) = theta;
       end
     end
   end
-  s = best_s;
-  theta = best_theta;
-  err = best_err;
 endfunction
