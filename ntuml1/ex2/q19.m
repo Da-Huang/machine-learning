@@ -3,8 +3,8 @@ function [err_in err_out] = q19()
   test = load('test19.txt');
 
   trainx = train(:, 1:end-1);
-  trainy = train(:, end) > 0;
-  best = n_decision_stump(trainx, trainy);
+  trainy = train(:, end);
+  best = n_decision_stump(trainx, trainy, left=-10, right=10);
   err_in = best.err;
   besti = unidrnd(length(best));
   s = best.s(besti);
@@ -12,29 +12,27 @@ function [err_in err_out] = q19()
   i = best.i(besti);
 
   testxi = test(:, i);
-  testy = test(:, end) > 0;
+  testy = test(:, end);
   err_out = get_err(testxi, testy, s, theta);
 endfunction
 
-function best = n_decision_stump(x, y)
+function best = n_decision_stump(x, y, left, right)
   % x is input
   % y is output
 
   best.err = -1;
-  best.s = [];
-  best.theta = [];
-  best.i = [];
 
   for i = 1:size(x, 2)
     xi = x(:, i);
 
-    sub_best = train_decision_stump(xi, y);
+    sub_best = train_decision_stump(xi, y, left, right);
 
     if (best.err == -1 || best.err >= sub_best.err)
       if (best.err == -1 || best.err > sub_best.err)
         best.err = sub_best.err;
         best.s = [];
         best.theta = [];
+        best.i = [];
       end
       for j = 1:length(sub_best.s)
         best.s(end+1) = sub_best.s(j);

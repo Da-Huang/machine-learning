@@ -3,7 +3,7 @@ function [err_in err_out] = q17(N=20, noise=0.2, T=5000)
   total_err_out = 0;
   for i = 1:T
     x = sort(unifrnd(-1, 1, N, 1));
-    y = xor(x > 0, unifrnd(0, 1, N, 1) <= noise);
+    y = sign(x) .* (1 - 2 .* (unifrnd(0, 1, N, 1) <= noise));
 
     best = train_decision_stump(x, y);
     err_in = best.err;
