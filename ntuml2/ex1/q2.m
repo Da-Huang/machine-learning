@@ -1,6 +1,7 @@
 function q2()
-  X = [1 0; 0 1; 0 -1; -1 0; 0 2; 0 -2; -2 0];
-  y = [-1 -1 -1 1 1 1 1]';
+  data = load('data2.dat');
+  X = data(:,2:end);
+  y = data(:,1);
   for i = 1:size(X,1)
     Z(i, :) = fie(X(i, :));
   end
