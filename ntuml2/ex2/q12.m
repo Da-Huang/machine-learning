@@ -20,7 +20,7 @@ function q12(T=300)
     if min_err < 0 || min_err > err
       min_err = err;
     end
-    correct = 2 * (trainx(:,i) - theta >= 0) - 1 == trainy;
+    correct = s * (2 * (trainx(:,i) - theta >= 0) - 1) == trainy;
     delta = sqrt((1 - err) / err);
     u(correct) /= delta;
     u(!correct) *= delta;
@@ -73,13 +73,13 @@ function [s i theta err] = train_stump(X, y, u)
 endfunction
 
 function [err u] = get_err(X, y, s, i, theta, u)
-  err = sum((2 * s * (X(:,i) - theta >= 0) - 1 != y) .* u) / sum(u);
+  err = sum((s * (2 * (X(:,i) - theta >= 0) - 1) != y) .* u) / sum(u);
 endfunction
 
 function err = get_ada_err(X, y, g)
   h = zeros(size(X,1), 1);
   for i = 1:size(g.s, 2)
-    h += g.alpha(i) * (g.s(i) * (X(:,g.i(i)) - g.theta(i) >= 0) - 1);
+    h += g.alpha(i) * g.s(i) * (2 * (X(:,g.i(i)) - g.theta(i) >= 0) - 1);
   end
-  err = sum(2 * (h >= 0) - 1 == y) / size(X,1);
+  err = sum(2 * (h >= 0) - 1 != y) / size(X,1);
 endfunction
